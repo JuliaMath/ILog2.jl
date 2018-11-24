@@ -3,6 +3,9 @@ uuid = "13fe3c7e-effe-11e8-1179-379e43bc5f24"
 authors = ["John Lapeyre <jlapeyre@users.noreply.github.com>"]
 version = "0.1.0"
 
+[deps]
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 

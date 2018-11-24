@@ -4,6 +4,7 @@
 This module provides `ilog2`.
 """
 module ILog2
+import StaticArrays
 
 export ilog2
 
@@ -20,12 +21,16 @@ end
 _ilog2exact(n::Integer)::Int = trailing_zeros(n)
 ilog2(x::Real) = ilog2(convert(Integer, floor(x)))
 
-const _pows2_128 = [Int128(2)^i for i = 0:126]
-const _pows2_U128 = [UInt128(2)^i for i = 0:127]
-const _pows2_64 = [2^i for i = 0:62]
-const _pows2_U64 = [UInt64(2)^i for i = 0:63]
-const _pows2_32 = [2^i for i = 0:30]
-const _pows2_U32 = [UInt32(2)^i for i = 0:31]
+function _make_power_array(itr)
+    return StaticArrays.SVector(itr...)
+end
+
+const _pows2_128 = _make_power_array(Int128(2)^i for i = 0:126)
+const _pows2_U128 = _make_power_array(UInt128(2)^i for i = 0:127)
+const _pows2_64 = _make_power_array(2^i for i = 0:62)
+const _pows2_U64 = _make_power_array(UInt64(2)^i for i = 0:63)
+const _pows2_32 = _make_power_array(2^i for i = 0:30)
+const _pows2_U32 = _make_power_array(UInt32(2)^i for i = 0:31)
 
 _ilog2floor(n::Int128) = searchsortedlast(_pows2_128, n) - 1
 _ilog2floor(n::UInt128) = searchsortedlast(_pows2_U128, n) - 1
