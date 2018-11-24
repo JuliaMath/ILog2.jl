@@ -18,7 +18,7 @@ end
     n1 = n + 1
     ln = 6
     for T in (Int8, UInt8, Int16, UInt16, Int32, UInt32, Int64, UInt64, Int128, UInt128, BigInt, Float64, BigFloat)
-        @test ilog2(Int32(n)) == ln
-        @test ilog2(Int32(n1)) == ln
+        @test ilog2(T(n)) == ln
+        @test ilog2(T(n1)) == ln
     end
 end
