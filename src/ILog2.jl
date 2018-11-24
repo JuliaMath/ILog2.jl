@@ -15,16 +15,16 @@ Compute the largest `m` such that `2^m <= n`.
 """
 function ilog2(n::Integer)
     n < 1 && throw(DomainError(n))
-    count_ones(n) == 1 && return _ilog2exact(n)
+    _ispow2(n) && return _ilog2exact(n)
     return _ilog2floor(n)
 end
+_ispow2(n::Integer) = count_ones(n) == 1
 _ilog2exact(n::Integer)::Int = trailing_zeros(n)
 ilog2(x::Real) = ilog2(convert(Integer, floor(x)))
 
 function _make_power_array(itr)
     return StaticArrays.SVector(itr...)
 end
-
 const _pows2_128 = _make_power_array(Int128(2)^i for i = 0:126)
 const _pows2_U128 = _make_power_array(UInt128(2)^i for i = 0:127)
 const _pows2_64 = _make_power_array(2^i for i = 0:62)
