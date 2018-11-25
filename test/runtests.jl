@@ -1,5 +1,6 @@
 using ILog2
 using Test
+using StaticArrays
 
 @testset "ILog2.jl" begin
     a = [0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3,
@@ -21,4 +22,9 @@ end
         @test ilog2(T(n)) == ln
         @test ilog2(T(n1)) == ln
     end
+end
+
+@testset "generate array" begin
+    a = ILog2._make_power_array(2^i for i = 0:62)
+    @test isa(a, StaticArrays.SVector)
 end
