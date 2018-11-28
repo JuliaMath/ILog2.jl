@@ -34,7 +34,7 @@ Compute the largest `m` such that `2^m <= n`.
 end
 
 @inline function ilog2(n::T) where {T<:SgndBitsT}
-    return !signbit(n) && msbindex(T) - leading_zeros(n)
+    !signbit(n) && return msbindex(T) - leading_zeros(n)
     throw(DomainError(n))
 end
 
