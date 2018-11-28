@@ -8,11 +8,37 @@ import StaticArrays
 
 export ilog2
 
+
+const UnsdBitsT = Union{UInt8, UInt16, UInt32, UInt64, UInt128}
+const SgndBitsT = Union{Int8, Int16, Int32, Int64, Int128}
+
+"""
+    msbindex(::Type{T})
+    T is an Integer bits type
+
+Evaluates as the one less than the number of bits in T
+"""
+@generated function msbindex(::Type{T}) where {T<:Integer}
+    return sizeof(T)*8 - 1
+end
+
+
 """
     ilog2(n::Integer)
 
 Compute the largest `m` such that `2^m <= n`.
 """
+function ilog2(n::T) where {T<:UnsdBitsT}
+    return msbindex(T) - leading_zeros(n)
+endn
+
+function ilog2(n::T) where {T<:SgndBitsT}
+    return !signbit(n) ? msbindex(T) - leading_zeros(n) : throw(DomainError(n))
+end
+
+
+
+
 function ilog2(n::Integer)
     n < 1 && throw(DomainError(n))
     _ispow2(n) && return _ilog2exact(n)
