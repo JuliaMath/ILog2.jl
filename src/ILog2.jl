@@ -27,13 +27,15 @@ end
     ilog2(n::Integer)
 
 Compute the largest `m` such that `2^m <= n`.
-"""
-function ilog2(n::T) where {T<:UnsdBitsT}
-    return msbindex(T) - leading_zeros(n)
-endn
+""" ilog2
 
-function ilog2(n::T) where {T<:SgndBitsT}
-    return !signbit(n) ? msbindex(T) - leading_zeros(n) : throw(DomainError(n))
+@inline function ilog2(n::T) where {T<:UnsdBitsT}
+    return msbindex(T) - leading_zeros(n)
+end
+
+@inline function ilog2(n::T) where {T<:SgndBitsT}
+    return !signbit(n) && msbindex(T) - leading_zeros(n)
+    throw(DomainError(n))
 end
 
 
