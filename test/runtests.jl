@@ -1,30 +1,35 @@
 using ILog2
 using Test
-using StaticArrays
 
-@testset "ILog2.jl" begin
-    a = [0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3,
-          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-          5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6,
-          6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-          6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
-    @test ilog2.(1:100) == a
-    @test ilog2.(Int128(1):100) == a
-    @test ilog2(big"2"^1000) == 1000
-end
+# FIXME: Tests for other floating point types
 
-@testset "types" begin
-    n = 64
-    n1 = n + 1
-    ln = 6
-    for T in (Int8, UInt8, Int16, UInt16, Int32, UInt32, Int64, UInt64, Int128, UInt128, BigInt, Float64, BigFloat)
-        @test ilog2(T(n)) == ln
-        @test ilog2(T(n1)) == ln
+@testset "ILog2" begin
+    bitstypes = (Int8, Int16, Int32, Int64,
+                 UInt8, UInt16, UInt32, UInt64, Int128, UInt128)
+    largest_Float64_corresponding_to_unique_integer = 2^53 - 1
+    for T in  bitstypes
+        N = min(typemax(T) - 1, largest_Float64_corresponding_to_unique_integer)
+        num_trials_per_type = min(N, 10^4)
+        nums = rand(T(1):T(N), num_trials_per_type)
+        for n in nums
+            @test ilog2(T(n)) == ilog2(float(n))
+        end
     end
 end
 
-@testset "generate array" begin
-    a = ILog2._make_power_array(2^i for i = 0:62)
-    @test isa(a, StaticArrays.SVector)
+@testset "BigInt" begin
+    for expt in rand(10:10^4, 10^3)
+        n = big(2)^expt
+        np = n + rand(1:100)
+        nm = n - rand(1:100)
+        @test ilog2(n) == expt
+        @test ilog2(np) == expt
+        @test ilog2(nm) == expt - 1
+        @test ilog2(n) == ilog2(float(n))
+    end
+end
+
+@testset "exceptions" begin
+    @test_throws ArgumentError ILog2.msbindex(BigInt)
+    @test_throws InexactError  ilog2(float(typemax(Int)-2^8))
 end
