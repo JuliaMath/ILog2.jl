@@ -32,4 +32,6 @@ end
 @testset "exceptions" begin
     @test_throws ArgumentError ILog2.msbindex(BigInt)
     @test_throws InexactError  ilog2(float(typemax(Int)-2^8))
+    @test_throws DomainError ilog2(0)
+    @test_throws DomainError ilog2(-1)
 end
