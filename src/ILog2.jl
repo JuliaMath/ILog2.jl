@@ -14,7 +14,7 @@ const IntBits  = Union{Int8, Int16, Int32, Int64, Int128,
     msbindex(::Type{T})
     T is an Integer bits type
 
-Evaluates as the one less than the number of bits in T
+Return one less than the number of bits in T
 """
 @generated function msbindex(::Type{T}) where {T<:Integer}
     return sizeof(T)*8 - 1
@@ -27,11 +27,12 @@ msbindex(::Type{BigInt}) = throw(ArgumentError("Expected an integer type with fi
 
 Compute the largest `m` such that `2^m <= n`.
 
-A large enough floating-point number corresponds to a range of integers.
-In this case, `ilog2` may throw an `InexactError`.
+!!! note
 
-`float(2^53 - 1)` is the largest `n::Float64` for which `eps(n) ≤ 1`.
-In this case, "the largest `m` such that `2^m <= n`" is ambiguous.
+    `float(2^53 - 1)` is the largest `n::Float64` for which `eps(n) ≤ 1`.
+    In this case, "the largest `m` such that `2^m <= n`" is ambiguous, although
+    `ilog2` may return a number. For large enough `n::Float64`, `ilog2` will
+    throw an `InexactError`. These cautionary statements do not apply for `n::Integer`.
 """
 function ilog2(n::T) where {T<:IntBits}
     n > zero(T) && return msbindex(T) - leading_zeros(n)
