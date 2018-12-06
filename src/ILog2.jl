@@ -30,7 +30,7 @@ Compute the largest `m` such that `2^m <= n`.
 !!! note
 
     `float(2^53 - 1)` is the largest `n::Float64` for which `eps(n) ≤ 1`.
-    In this case, "the largest `m` such that `2^m <= n`" is ambiguous, although
+    For larger `n::Float64`, "the largest `m` such that `2^m <= n`" is ambiguous, although
     `ilog2` may return a number. For large enough `n::Float64`, `ilog2` will
     throw an `InexactError`. These cautionary statements do not apply for `n::Integer`.
 """
