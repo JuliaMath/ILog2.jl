@@ -8,7 +8,7 @@ platform:
   - x64
 matrix:
   allow_failures:
-    - julia_version: nightly
+    - platform: x86
 branches:
   only:
     - master
