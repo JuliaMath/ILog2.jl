@@ -41,8 +41,8 @@ end
 ilog2(n::BigInt) = Base.GMP.MPZ.sizeinbase(n, 2) - 1
 ilog2(x::Real) = ilog2(convert(Integer, floor(x)))
 
-
-# This is several times slower than the other methods
+# This is several times slower than the other methods. But none of the standard bitstype integers,
+# nor `BigInt`, dispatch to this method.
 ilog2(n::Integer) = convert(typeof(n), floor(log(2,n)))
 
 end # ILog2
