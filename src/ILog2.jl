@@ -5,7 +5,7 @@ This module provides `ilog2`.
 """
 module ILog2
 
-export ilog2
+export ilog2, checkispow2
 
 const IntBits  = Union{Int8, Int16, Int32, Int64, Int128,
                        UInt8, UInt16, UInt32, UInt64, UInt128}
@@ -45,4 +45,19 @@ ilog2(x::Real) = ilog2(convert(Integer, floor(x)))
 # nor `BigInt`, dispatch to this method.
 ilog2(n::Integer) = convert(typeof(n), floor(log(2,n)))
 
-end # ILog2
+"""
+    checkispow2(n::Number)
+
+Return base-2 logarithm of `n` if `n` is a power of two.
+Otherwise throw a `DomainError`.
+"""
+function checkispow2(n::Number)
+    if ! ispow2(n)
+        throw(DomainError(n, "$n is not a power of two."))
+    end
+    return ilog2(n)
+end
+
+
+
+end # module ILog2

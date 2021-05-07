@@ -29,9 +29,18 @@ end
     end
 end
 
+@testset "checkispow2" begin
+    @test checkispow2(2) == 1
+    @test checkispow2(8) == 3
+    @test checkispow2(1024.0) == 10
+    @test checkispow2(1024.0) isa Int
+end
+
 @testset "exceptions" begin
     @test_throws ArgumentError ILog2.msbindex(BigInt)
     @test_throws InexactError  ilog2(float(typemax(Int)-2^8))
     @test_throws DomainError ilog2(0)
     @test_throws DomainError ilog2(-1)
+
+    @test_throws DomainError checkispow2(3)
 end
