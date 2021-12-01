@@ -10,6 +10,15 @@ export ilog2, checkispow2
 const IntBits  = Union{Int8, Int16, Int32, Int64, Int128,
                        UInt8, UInt16, UInt32, UInt64, UInt128}
 
+
+"""
+    ilog2(x, RoundUp)
+
+Return the smallest `m` such that `2^m >= n`.
+"""
+ilog2(x, ::typeof(RoundUp)) = ispow2(x) ? ilog2(x) : ilog2(x) + 1
+ilog2(x, ::typeof(RoundDown)) = ilog2(x)
+
 """
     msbindex(::Type{T})
     T is an Integer bits type

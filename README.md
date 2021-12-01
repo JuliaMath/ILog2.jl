@@ -11,5 +11,8 @@ This package provides a fast implementation of the integer-valued, base-2 logari
 `ilog2(n::Real)` compute the largest `m` such that `2^m <= n`.
 
 
+`ilog2(n::Real, RoundUp)` compute the smallest `m` such that `2^m >= n`.
+
+
 `checkispow2(n::Number)` returns `ilog2(n)` if `n` is a power of two.
 Otherwise throws a `DomainError`.

@@ -44,3 +44,9 @@ end
 
     @test_throws DomainError checkispow2(3)
 end
+
+@testset "RoundUp" begin
+    @test ilog2(15) == 3
+    @test ilog2(15, RoundDown) == 3
+    @test ilog2(15, RoundUp) == 4
+end
