@@ -48,7 +48,43 @@ function ilog2(n::T) where {T<:IntBits}
     throw(DomainError(n))
 end
 ilog2(n::BigInt) = Base.GMP.MPZ.sizeinbase(n, 2) - 1
-ilog2(x::Real) = ilog2(convert(Integer, floor(x)))
+
+function ilog2(x::Real)
+    if x < typemax(Int)
+        return fastilog2(x)
+    end
+    return slowilog2(x)
+end
+
+"""
+    slowilog2(x::Real)
+
+This is slower than `ilog2` for `x::Float64` with `x` less than
+about `1e19` (when `Int` is `Int64`); more precisely less than `typemax(Int64)`.
+However, it is slightly faster than `ilog2` when `x > typemax(Int)`.
+
+Use `slowilog2(x::Float64)` only under exceptional circumstances: when you need 10-20% faster
+ilog2 for `Float64` and `x` is very large, ie `x > typemax(Int)`.
+"""
+@inline function slowilog2(x::Real)
+    return floor(Int, log2(x))
+end
+
+"""
+    fastilog2(x::AbstractFloat)
+
+This is slightly faster than `ilog2` for `x::Float64` with `x` less than
+about `1e19` (when `Int` is `Int64`); more precisely less than `typemax(Int64)`.
+However, `fastilog2` will throw an `InexactError` for
+when `x > typemax(Int)`.
+
+Use `fastilog2(::Float64)` only under exceptional circumstances: when you need 10-20% faster
+ilog2 for `Float64` and the input is small enough.
+"""
+@inline function fastilog2(x::AbstractFloat)
+    return ilog2(floor(Integer, x))
+end
+
 
 # This is several times slower than the other methods. But none of the standard bitstype integers,
 # nor `BigInt`, dispatch to this method.
