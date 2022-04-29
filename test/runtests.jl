@@ -17,6 +17,11 @@ using Test
     end
 end
 
+@testset  "Large Float64" begin
+    x = 3e19
+    @test ilog2(x) == floor(Int, log2(x))
+end
+
 @testset "BigInt" begin
     for expt in rand(10:10^4, 10^3)
         n = big(2)^expt
@@ -38,7 +43,6 @@ end
 
 @testset "exceptions" begin
     @test_throws ArgumentError ILog2.msbindex(BigInt)
-    @test_throws InexactError  ilog2(float(typemax(Int)-2^8))
     @test_throws DomainError ilog2(0)
     @test_throws DomainError ilog2(-1)
 

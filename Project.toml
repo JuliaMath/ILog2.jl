@@ -6,7 +6,7 @@ name = "ILog2"
 # Lets see if it works
 uuid = "2cd5bd5f-40a1-5050-9e10-fc8cdb6109f5"
 authors = ["John Lapeyre <jlapeyre@users.noreply.github.com>"]
-version = "0.2.3"
+version = "0.2.4"
 
 [compat]
 julia = "1"
