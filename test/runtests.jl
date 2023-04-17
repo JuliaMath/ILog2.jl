@@ -4,7 +4,10 @@ using Test
 # FIXME: Tests for other floating point types
 
 include("aqua_test.jl")
-include("jet_test.jl")
+
+@static if Base.VERSION >= v"1.7"
+    include("jet_test.jl")
+end
 
 @testset "ILog2" begin
     bitstypes = (Int8, Int16, Int32, Int64,
