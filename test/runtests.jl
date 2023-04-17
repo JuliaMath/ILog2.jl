@@ -43,8 +43,10 @@ end
 @testset "checkispow2" begin
     @test checkispow2(2) == 1
     @test checkispow2(8) == 3
-    @test checkispow2(1024.0) == 10
-    @test checkispow2(1024.0) isa Int
+    if VERSION >= v"1.6"
+        @test checkispow2(1024.0) == 10
+        @test checkispow2(1024.0) isa Int
+    end
 end
 
 @testset "exceptions" begin
