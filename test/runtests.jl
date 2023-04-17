@@ -3,6 +3,9 @@ using Test
 
 # FIXME: Tests for other floating point types
 
+include("aqua_test.jl")
+include("jet_test.jl")
+
 @testset "ILog2" begin
     bitstypes = (Int8, Int16, Int32, Int64,
                  UInt8, UInt16, UInt32, UInt64, Int128, UInt128)
