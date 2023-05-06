@@ -12,7 +12,7 @@ end
 @testset "ILog2" begin
     bitstypes = (Int8, Int16, Int32, Int64,
                  UInt8, UInt16, UInt32, UInt64, Int128, UInt128)
-    largest_Float64_corresponding_to_unique_integer = 2^53 - 1
+    largest_Float64_corresponding_to_unique_integer = Int64(2)^53 - 1
     for T in  bitstypes
         N = min(typemax(T) - 1, largest_Float64_corresponding_to_unique_integer)
         num_trials_per_type = min(N, 10^4)
