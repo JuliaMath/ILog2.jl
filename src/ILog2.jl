@@ -11,15 +11,18 @@ const IntBits  = Union{Int8, Int16, Int32, Int64, Int128,
                        UInt8, UInt16, UInt32, UInt64, UInt128}
 
 @static if VERSION < v"1.6"
-    Base.ispow2(x::AbstractFloat) = !iszero(x) && frexp(x)[1] == 0.5
+    _ispow2(x::AbstractFloat) = !iszero(x) && frexp(x)[1] == 0.5
 end
+
+_ispow2(x::Any) = Base.ispow2(x)
+
 
 """
     ilog2(x, RoundUp)
 
 Return the smallest `m` such that `2^m >= n`.
 """
-ilog2(x, ::typeof(RoundUp)) = ispow2(x) ? ilog2(x) : ilog2(x) + 1
+ilog2(x, ::typeof(RoundUp)) = _ispow2(x) ? ilog2(x) : ilog2(x) + 1
 ilog2(x, ::typeof(RoundDown)) = ilog2(x)
 
 """
@@ -72,7 +75,7 @@ Return base-2 logarithm of `n` if `n` is a power of two.
 Otherwise throw a `DomainError`.
 """
 function checkispow2(n::Number)
-    if ! ispow2(n)
+    if ! _ispow2(n)
         throw(DomainError(n, "$n is not a power of two."))
     end
     return ilog2(n)
