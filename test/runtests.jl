@@ -61,4 +61,10 @@ end
     @test ilog2(15) == 3
     @test ilog2(15, RoundDown) == 3
     @test ilog2(15, RoundUp) == 4
+    for T in (Float16, Float32, Float64)
+        x = T(15.1)
+        @test ilog2(x) == 3
+        @test ilog2(x, RoundDown) == 3
+        @test ilog2(x, RoundUp) == 4
+    end
 end
