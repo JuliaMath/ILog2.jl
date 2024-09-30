@@ -16,14 +16,18 @@ end
 
 _ispow2(x::Any) = Base.ispow2(x)
 
-
 """
     ilog2(x, RoundUp)
 
-Return the smallest `m` such that `2^m >= n`.
+Return the smallest non-negative integer `m` such that `2^m >= n`.
 """
 ilog2(x, ::typeof(RoundUp)) = _ispow2(x) ? ilog2(x) : ilog2(x) + 1
 ilog2(x, ::typeof(RoundDown)) = ilog2(x)
+
+function ilog2(x)
+    x <= zero(x) && throw(DomainError(x))
+    _ilog2(x)
+end
 
 """
     msbindex(::Type{T})
@@ -40,7 +44,7 @@ msbindex(::Type{BigInt}) = throw(ArgumentError("Expected an integer type with fi
 """
     ilog2(n::Real)
 
-Compute the largest `m` such that `2^m <= n`.
+Return the largest non-negative integer `m` such that `2^m <= n`.
 
 !!! note
 
@@ -49,24 +53,23 @@ Compute the largest `m` such that `2^m <= n`.
     `ilog2` may return a number. For large enough `n::Float64`, `ilog2` will
     throw an `InexactError`. These cautionary statements do not apply for `n::Integer`.
 """
-function ilog2(n::T) where {T<:IntBits}
-    n > zero(T) && return msbindex(T) - leading_zeros(n)
-    throw(DomainError(n))
+function _ilog2(n::T) where {T<:IntBits}
+    msbindex(T) - leading_zeros(n)
 end
-ilog2(n::BigInt) = Base.GMP.MPZ.sizeinbase(n, 2) - 1
+_ilog2(n::BigInt) = Base.GMP.MPZ.sizeinbase(n, 2) - 1
 
 # Only needed for version < v1.7
-function ilog2(x::Real)
-    return ilog2(float(x))
+function _ilog2(x::Real)
+    return _ilog2(float(x))
 end
 
-function ilog2(x::Union{Float16, Float32, Float64, BigFloat})
+function _ilog2(x::Union{Float16, Float32, Float64, BigFloat})
     return exponent(x)
 end
 
 # This is several times slower than the other methods. But none of the standard bitstype integers,
 # nor `BigInt`, dispatch to this method.
-ilog2(n::Integer) = convert(typeof(n), floor(log(2,n)))
+_ilog2(n::Integer) = convert(typeof(n), floor(log(2,n)))
 
 """
     checkispow2(n::Number)
@@ -78,7 +81,7 @@ function checkispow2(n::Number)
     if ! _ispow2(n)
         throw(DomainError(n, "$n is not a power of two."))
     end
-    return ilog2(n)
+    return _ilog2(n)
 end
 
 

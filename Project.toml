@@ -1,7 +1,7 @@
 name = "ILog2"
 uuid = "2cd5bd5f-40a1-5050-9e10-fc8cdb6109f5"
 authors = ["John Lapeyre <jlapeyre@users.noreply.github.com>"]
-version = "1.0.0"
+version = "2.0.0"
 
 [compat]
 Aqua = ">= 0.8"
