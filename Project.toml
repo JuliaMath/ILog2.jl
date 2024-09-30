@@ -4,7 +4,10 @@ authors = ["John Lapeyre <jlapeyre@users.noreply.github.com>"]
 version = "0.2.4"
 
 [compat]
+Aqua = ">= 0.8"
 julia = "1"
+JET = ">= 0.0"
+Test = ">= 0.0"
 
 [extras]
 Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"

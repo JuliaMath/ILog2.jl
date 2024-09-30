@@ -21,6 +21,10 @@ end
             @test ilog2(T(n)) == ilog2(float(n))
         end
     end
+
+    @test ilog2(20//2) == 3
+    @test ilog2(true) === false
+    @test_throws InexactError ilog2(false)
 end
 
 @testset  "Large Float64" begin

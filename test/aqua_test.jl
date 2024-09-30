@@ -5,11 +5,6 @@ using Aqua: Aqua
     Aqua.test_deps_compat(ILog2)
 end
 
-# This often gives false positive
-# @testset "aqua project toml formatting" begin
-#     Aqua.test_project_toml_formatting(ILog2)
-# end
-
 @testset "aqua unbound_args" begin
     Aqua.test_unbound_args(ILog2)
 end
@@ -24,8 +19,8 @@ end
     Aqua.test_ambiguities([ILog2, Core, Base])
 end
 
-@testset "aqua piracy" begin
-    Aqua.test_piracy(ILog2)
+@testset "aqua piracies" begin
+    Aqua.test_piracies(ILog2)
 end
 
 @testset "aqua project extras" begin
