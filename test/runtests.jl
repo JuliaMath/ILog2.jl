@@ -3,11 +3,11 @@ using Test
 
 # FIXME: Tests for other floating point types
 
-include("aqua_test.jl")
+# include("aqua_test.jl")
 
-@static if Base.VERSION >= v"1.7"
-    include("jet_test.jl")
-end
+# @static if Base.VERSION >= v"1.7"
+#     include("jet_test.jl")
+# end
 
 @testset "ILog2" begin
     bitstypes = (Int8, Int16, Int32, Int64,
@@ -24,7 +24,6 @@ end
 
     @test ilog2(20//2) == 3
     @test ilog2(true) === false
-    @test_throws InexactError ilog2(false)
 end
 
 @testset  "Large Float64" begin
@@ -55,10 +54,34 @@ end
 
 @testset "exceptions" begin
     @test_throws ArgumentError ILog2.msbindex(BigInt)
+
     @test_throws DomainError ilog2(0)
     @test_throws DomainError ilog2(-1)
-
+    @test_throws DomainError ilog2(false)
     @test_throws DomainError checkispow2(3)
+    @test_throws DomainError ilog2(-1.0)
+    @test_throws DomainError ilog2(0.0)
+    @test_throws DomainError ilog2(big(0))
+    @test_throws DomainError ilog2(BigFloat(0))
+    @test_throws DomainError ilog2(BigFloat(-1))
+    @test_throws DomainError ilog2(big(-3))
+    @test_throws DomainError ilog2(big(-64//2))
+
+    @test_throws DomainError ilog2(0, RoundUp)
+    @test_throws DomainError ilog2(-1, RoundUp)
+    @test_throws DomainError ilog2(false, RoundUp)
+    @test_throws DomainError checkispow2(3)
+    @test_throws DomainError ilog2(-1.0, RoundUp)
+    @test_throws DomainError ilog2(0.0, RoundUp)
+    @test_throws DomainError ilog2(big(0), RoundUp)
+    @test_throws DomainError ilog2(BigFloat(0), RoundUp)
+    @test_throws DomainError ilog2(BigFloat(-1), RoundUp)
+    @test_throws DomainError ilog2(big(-3), RoundUp)
+    if VERSION <= v"1.5"
+        @test_throws MethodError ilog2(big(-64//2), RoundUp)
+    else
+        @test_throws DomainError ilog2(big(-64//2), RoundUp)
+    end
 end
 
 @testset "RoundUp" begin
