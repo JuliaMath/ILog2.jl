@@ -77,7 +77,11 @@ end
     @test_throws DomainError ilog2(BigFloat(0), RoundUp)
     @test_throws DomainError ilog2(BigFloat(-1), RoundUp)
     @test_throws DomainError ilog2(big(-3), RoundUp)
-    @test_throws DomainError ilog2(big(-64//2), RoundUp)
+    if VERSION <= v"1.5"
+        @test_throws MethodError ilog2(big(-64//2), RoundUp)
+    else
+        @test_throws DomainError ilog2(big(-64//2), RoundUp)
+    end
 end
 
 @testset "RoundUp" begin
